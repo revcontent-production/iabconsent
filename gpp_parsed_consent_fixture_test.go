@@ -47,11 +47,11 @@ var gppParsedConsentFixtures = map[string]map[int]*iabconsent.MspaParsedConsent{
 		iabconsent.UsFloridaSID:     mspaConsentFixtures[iabconsent.UsFloridaSID]["Bqqqqqqo"],
 		iabconsent.UsMontanaSID:     mspaConsentFixtures[iabconsent.UsMontanaSID]["Bqqqqqqo"],
 	},
-	// Valid GPP string w/ sections for EU TCF V2 and US Privacy
-	// Since both are not supported, Consent fixture should be blank.
-	"DBACNY~CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA~1YNN": {},
-	// Valid GPP w/ US National MSPA and US Privacy, but skip US Privacy until supported.
-	"DBABzw~1YNN~BVVqAAEABCA.QA": {7: mspaConsentFixtures[7]["BVVqAAEABCA.QA"]},
+	//// Valid GPP string w/ sections for EU TCF V2 and US Privacy
+	//// Since both are not supported, Consent fixture should be blank.
+	//"DBACNY~CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA~1YNN": {},
+	//// Valid GPP w/ US National MSPA and US Privacy, but skip US Privacy until supported.
+	//"DBABzw~1YNN~BVVqAAEABCA.QA": {7: mspaConsentFixtures[7]["BVVqAAEABCA.QA"]},
 	// Valid GPP w/ US Florida MSPA, Subsection of GPC False.
 	"DBABAw~Bqqqqqqo": {iabconsent.UsFloridaSID: mspaConsentFixtures[iabconsent.UsFloridaSID]["Bqqqqqqo"]},
 	// Valid GPP w/ US Montana MSPA, Subsection of GPC False.
@@ -72,4 +72,20 @@ var gppParsedConsentFixtures = map[string]map[int]*iabconsent.MspaParsedConsent{
 	"DBABAYA~BlWqqqmaqA": {iabconsent.UsNewJerseySID: mspaConsentFixtures[iabconsent.UsNewJerseySID]["BlWqqqmaqA"]},
 	// Valid GPP w/ US Tennessee MSPA, Subsection of GPC False.
 	"DBABQYA~Bqqqqqo": {iabconsent.UsTennesseeSID: mspaConsentFixtures[iabconsent.UsTennesseeSID]["Bqqqqqo"]},
+}
+
+var tcfeuParsedConsentFixtures = map[string]map[int]*iabconsent.V2ParsedConsent{
+	"DBABM~CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA": {iabconsent.EuropeTCFv2SID: tcfeuV2ConsentFixtures[iabconsent.EuropeTCFv2SID]["CPXxRfAPXxRfAAfKABENB-CgAAAAAAAAAAYgAAAAAAAA"]},
+	"DBABMA~CPzyhEAPzyhEAEXdtAENDXCwAP_AAH_AACiQI9AB4C5EQCFDcHJNAIoUAAQDQIhAAAAgAAABgYAACBoAAIwAAAAwAAAAAAoCAAAAIABAAAEAAAAAAAEAAAAAAAEAAEAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAIAEEAAAAACAAEAAAAAABAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAQQUgSAALAAqABcADIAHAAQAAkABkADQAHIAPAAfQBEAEUAJgATwApABfADMAGgAPwAhIBlAGWAOeAdwB3gEDgIOAhABFgCngF1AXmAyYBlgDPgGqgP3AgoAAAAA.YAAAAAAAAAAA": {iabconsent.EuropeTCFv2SID: tcfeuV2ConsentFixtures[iabconsent.EuropeTCFv2SID]["CPzyhEAPzyhEAEXdtAENDXCwAP_AAH_AACiQI9AB4C5EQCFDcHJNAIoUAAQDQIhAAAAgAAABgYAACBoAAIwAAAAwAAAAAAoCAAAAIABAAAEAAAAAAAEAAAAAAAEAAEAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAIAEEAAAAACAAEAAAAAABAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAQQUgSAALAAqABcADIAHAAQAAkABkADQAHIAPAAfQBEAEUAJgATwApABfADMAGgAPwAhIBlAGWAOeAdwB3gEDgIOAhABFgCngF1AXmAyYBlgDPgGqgP3AgoAAAAA.YAAAAAAAAAAA"]},
+}
+
+var ccpaParsedConsentFixtures = map[string]map[int]*iabconsent.CcpaParsedConsent{
+	"DBABTA~1---": {iabconsent.UsPVSID: ccpaConsentFixtures[iabconsent.UsPVSID]["1---"]},
+	"DBABTA~1YYY": {iabconsent.UsPVSID: ccpaConsentFixtures[iabconsent.UsPVSID]["1YYY"]},
+	"DBABTA~1NYN": {iabconsent.UsPVSID: ccpaConsentFixtures[iabconsent.UsPVSID]["1NYN"]},
+	"DBABTA~1NNN": {iabconsent.UsPVSID: ccpaConsentFixtures[iabconsent.UsPVSID]["1NNN"]},
+}
+
+var tcfcaParsedConsentFixtures = map[string]map[int]*iabconsent.V2CAParsedConsent{
+	"DBABDA~CPzyhEAPzyhEAEXdtAENDXCgAf-AAP-AAAj0AHgLkRAIUNwck0AihQABANAiEAAICAAAAGBgAAIGgAAjAAAADAAAAAACgIAAAAgAEAAAQAAAAAAAQAAAAAAAQAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAgAQQAAAAAIAAQAACAAAEAACAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABBBSBKAAsACoAFwAMgAcABAACQAGQANAAcgA8AB9AEQARQAmABPACkAF8AMwAaAA_ACEAFLAMoAywBzwDuAO8AgcBBwEIAIsAU8AuoC8wGTAMsAZ8A1UB-4EFA": {iabconsent.CanadaTCFSID: tcfcaConsentFixtures[iabconsent.CanadaTCFSID]["CPzyhEAPzyhEAEXdtAENDXCgAf-AAP-AAAj0AHgLkRAIUNwck0AihQABANAiEAAICAAAAGBgAAIGgAAjAAAADAAAAAACgIAAAAgAEAAAQAAAAAAAQAAAAAAAQAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAgAQQAAAAAIAAQAACAAAEAACAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABBBSBKAAsACoAFwAMgAcABAACQAGQANAAcgA8AB9AEQARQAmABPACkAF8AMwAaAA_ACEAFLAMoAywBzwDuAO8AgcBBwEIAIsAU8AuoC8wGTAMsAZ8A1UB-4EFA"]},
 }
