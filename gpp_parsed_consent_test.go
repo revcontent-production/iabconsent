@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"strings"
 
-	"github.com/LiveRamp/iabconsent"
+	"github.com/revcontent-production/iabconsent"
 )
 
 type GppParseSuite struct{}
