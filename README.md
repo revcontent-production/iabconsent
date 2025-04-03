@@ -20,7 +20,7 @@ A Golang implementation of the:
 
 To install:
 ```
-go get -v github.com/LiveRamp/iabconsent
+go get -v github.com/revcontent-production/iabconsent
 ```
 
 # Transparency and Consent Framework v1.1 + v2.0-v2.2
@@ -35,7 +35,7 @@ Example use:
 ```go
 package main
 
-import "github.com/LiveRamp/iabconsent"
+import "github.com/revcontent-production/iabconsent"
 
 func main() {
     var consent = "COvzTO5OvzTO5BRAAAENAPCoALIAADgAAAAAAewAwABAAlAB6ABBFAAA"
@@ -78,7 +78,7 @@ Example use:
 ```go
 package main
 
-import "github.com/LiveRamp/iabconsent"
+import "github.com/revcontent-production/iabconsent"
 
 func main() {
 	var consent = "DBABrGA~BVVqAAEABCA~BVoYYZoI~BVoYYYI~BVoYYQg~BVaGGGCA~BVoYYYQg"

@@ -6,7 +6,7 @@ import (
 	"github.com/go-check/check"
 	"github.com/pkg/errors"
 
-	"github.com/LiveRamp/iabconsent"
+	"github.com/revcontent-production/iabconsent"
 )
 
 type MspaSuite struct{}
