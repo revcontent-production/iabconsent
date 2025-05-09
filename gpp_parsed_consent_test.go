@@ -425,4 +425,57 @@ func (s *GppParseSuite) TestParse1(c *check.C) {
 	gppSections, err = iabconsent.MapGppSectionToParser("DBACOe~CPzyhEAPzyhEAEXdtAENDXCwAP_AAH_AACiQI9AB4C5EQCFDcHJNAIoUAAQDQIhAACAgAAABgYAACBoAAIwAAAAwAAAAAAoCAAAAIABAAAEAAAAAAAEAAAAAAAEAAEAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAIAEEAAAAACAAEAAAgAABAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAQQUgSgALAAqABcADIAHAAQAAkABkADQAHIAPAAfQBEAEUAJgATwApABfADMAGgAPwAhABSwDKAMsAc8A7gDvAIHAQcBCACLAFPALqAvMBkwDLAGfANVAfuBBQAA~CPzyhEAPzyhEAEXdtAENDXCgAf-AAP-AAAj0AHgLkRAIUNwck0AihQABANAiEAAICAAAAGBgAAIGgAAjAAAADAAAAAACgIAAAAgAEAAAQAAAAAAAQAAAAAAAQAAQAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIAAAAAgAQQAAAAAIAAQAACAAAEAACAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABBBSBKAAsACoAFwAMgAcABAACQAGQANAAcgA8AB9AEQARQAmABPACkAF8AMwAaAA_ACEAFLAMoAywBzwDuAO8AgcBBwEIAIsAU8AuoC8wGTAMsAZ8A1UB-4EFA~1YN-")
 	c.Check(err, check.IsNil)
 	c.Check(len(gppSections), check.Equals, 3)
+
+	gppSections, err = iabconsent.MapGppSectionToParser("DBABFg~BVKAAAg")
+	sec := gppSections[0]
+	consent, err := sec.ParseConsent()
+	c.Check(consent.(*iabconsent.MspaParsedConsent).Version, check.Equals, 1)
+	c.Check(err, check.IsNil)
+	c.Check(len(gppSections), check.Equals, 1)
+
+	gppSections, err = iabconsent.MapGppSectionToParser("DBABFg~BVaGGGCA")
+	sec = gppSections[0]
+	consent, err = sec.ParseConsent()
+	c.Check(consent.(*iabconsent.MspaParsedConsent).Version, check.Equals, 1)
+	c.Check(err, check.IsNil)
+	c.Check(len(gppSections), check.Equals, 1)
+
+	gppSections, err = iabconsent.MapGppSectionToParser("DBABLA~BVQqAAAAAWA.QA")
+	c.Check(err, check.IsNil)
+	c.Check(len(gppSections), check.Equals, 1)
+	sec = gppSections[0]
+	consent, err = sec.ParseConsent()
+	c.Check(err, check.IsNil)
+	c.Check(consent.(*iabconsent.MspaParsedConsent).Version, check.Equals, 1)
+
+	gppSections, err = iabconsent.MapGppSectionToParser("DBABzw~1YNY~BVQqAAAAAUA")
+	c.Check(err, check.IsNil)
+	c.Check(len(gppSections), check.Equals, 2)
+	sec = gppSections[0]
+	consent, err = sec.ParseConsent()
+	c.Check(err, check.IsNil)
+	c.Check(consent.(*iabconsent.CcpaParsedConsent).Version, check.Equals, 1)
+	c.Check(consent.(*iabconsent.CcpaParsedConsent).Notice, check.Equals, uint8(89))
+	c.Check(consent.(*iabconsent.CcpaParsedConsent).OptOutSale, check.Equals, uint8(78))
+	c.Check(consent.(*iabconsent.CcpaParsedConsent).LSPACoveredTransaction, check.Equals, uint8(89))
+	sec = gppSections[1]
+	consent, err = sec.ParseConsent()
+	c.Check(err, check.IsNil)
+	c.Check(consent.(*iabconsent.MspaParsedConsent).Version, check.Equals, 1)
+	c.Check(consent.(*iabconsent.MspaParsedConsent).TargetedAdvertisingOptOut, check.Equals, iabconsent.MspaOptout(2))
+	c.Check(consent.(*iabconsent.MspaParsedConsent).SensitiveDataProcessingOptOutNotice, check.Equals, iabconsent.MspaNotice(0))
+	c.Check(consent.(*iabconsent.MspaParsedConsent).SharingOptOutNotice, check.Equals, iabconsent.MspaNotice(1))
+	c.Check(consent.(*iabconsent.MspaParsedConsent).TargetedAdvertisingOptOutNotice, check.Equals, iabconsent.MspaNotice(1))
+
+	gppSections, err = iabconsent.MapGppSectionToParser("DBABzw~~BVQqAAAAAgA")
+	c.Check(err, check.IsNil)
+	c.Check(len(gppSections), check.Equals, 2)
+	sec = gppSections[0]
+	c.Check(sec.GetSectionValue(), check.Equals, "")
+	consent, err = sec.ParseConsent()
+	c.Check(err, check.NotNil)
+	sec = gppSections[1]
+	consent, err = sec.ParseConsent()
+	c.Check(err, check.IsNil)
+	c.Check(consent.(*iabconsent.MspaParsedConsent).Version, check.Equals, 1)
 }

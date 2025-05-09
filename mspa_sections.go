@@ -165,12 +165,12 @@ func (u *USPV) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsNational) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usnat consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -215,12 +215,12 @@ func (m *MspaUsNational) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsCA) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usca consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -262,12 +262,12 @@ func (m *MspaUsCA) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsVA) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usva consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -307,12 +307,12 @@ func (m *MspaUsVA) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsCO) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usco consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -352,12 +352,12 @@ func (m *MspaUsCO) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsUT) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usut consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -398,12 +398,12 @@ func (m *MspaUsUT) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsCT) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usct consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -443,12 +443,12 @@ func (m *MspaUsCT) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsFL) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usfl consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -489,12 +489,12 @@ func (m *MspaUsFL) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsMT) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usmt consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -535,12 +535,12 @@ func (m *MspaUsMT) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsOR) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usor consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -581,12 +581,12 @@ func (m *MspaUsOR) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsTX) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse ustx consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -627,12 +627,12 @@ func (m *MspaUsTX) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsDE) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usde consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -673,12 +673,12 @@ func (m *MspaUsDE) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsIA) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usia consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -717,12 +717,12 @@ func (m *MspaUsIA) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsNE) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usne consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -761,12 +761,12 @@ func (m *MspaUsNE) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsNH) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usnh consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -805,12 +805,12 @@ func (m *MspaUsNH) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsNJ) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse usnj consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -849,12 +849,12 @@ func (m *MspaUsNJ) ParseConsent() (GppParsedConsent, error) {
 func (m *MspaUsTN) ParseConsent() (GppParsedConsent, error) {
 	var segments = strings.Split(m.sectionValue, ".")
 
-	var b, err = base64.RawURLEncoding.DecodeString(segments[0])
+	var decoded, err = getBytesFromBase64(segments[0])
 	if err != nil {
 		return nil, errors.Wrap(err, "parse ustn consent string")
 	}
 
-	var r = NewConsentReader(b)
+	var r = NewConsentReader(decoded)
 
 	// This block of code directly describes the format of the payload.
 	// The spec for the consent string can be found here:
@@ -887,4 +887,23 @@ func (m *MspaUsTN) ParseConsent() (GppParsedConsent, error) {
 	}
 
 	return p, r.Err
+}
+
+func getBytesFromBase64(encoded string) ([]byte, error) {
+	buff := []byte(padLastQuantum(encoded))
+	decoded := make([]byte, base64.RawURLEncoding.DecodedLen(len(buff)))
+	var n, err = base64.RawURLEncoding.Decode(decoded, buff)
+	if err != nil {
+		return nil, err
+	}
+	decoded = decoded[:n:n]
+	return decoded, nil
+}
+
+func padLastQuantum(encoded string) string {
+	if (len(encoded) % 4) > 0 {
+		return encoded + "A" // pad with zeros
+	}
+
+	return encoded
 }
