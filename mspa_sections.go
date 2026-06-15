@@ -114,6 +114,15 @@ func NewMspa(sid int, section string) GppSectionParser {
 		return &MspaUsTN{GppSection{sectionId: UsTennesseeSID, sectionValue: section}}
 	case UsMinnesotaSID:
 		return &MspaUsMN{GppSection{sectionId: UsMinnesotaSID, sectionValue: section}}
+	// US-State sections using the newer GPP Section-Header wire format (REV-32).
+	case UsMarylandSID:
+		return &MspaUsMD{GppSection{sectionId: UsMarylandSID, sectionValue: section}}
+	case UsIndianaSID:
+		return &MspaUsIN{GppSection{sectionId: UsIndianaSID, sectionValue: section}}
+	case UsKentuckySID:
+		return &MspaUsKY{GppSection{sectionId: UsKentuckySID, sectionValue: section}}
+	case UsRhodeIslandSID:
+		return &MspaUsRI{GppSection{sectionId: UsRhodeIslandSID, sectionValue: section}}
 	}
 	// Skip if no matching struct, as Section ID is not supported yet.
 	// Any newly supported Section IDs should be added as cases here.
