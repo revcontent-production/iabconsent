@@ -604,9 +604,16 @@ func (v *V2ParsedConsentSuite) TestMinorVersion(c *check.C) {
 			minorVersion:  2,
 		},
 		{
+			// TCFPolicyVersion of 5 indicates TCF v2.3.
+			desc:          "TCFPolicyVersion of 5",
 			consentString: "CPuy0IAPuy0IAPoABABGCyFAAAAAAAAAAAAAAAAAAAAA.QAAA.IAAA",
+			minorVersion:  3,
+		},
+		{
+			desc:          "TCFPolicyVersion of 6",
+			consentString: "CPuy0IAPuy0IAPoABABGCyGAAAAAAAAAAAAAAAAAAAAA.QAAA.IAAA",
 			minorVersion:  100,
-			err:           "Unsupported TCFPolicyVersion 5",
+			err:           "Unsupported TCFPolicyVersion 6",
 		},
 	}
 

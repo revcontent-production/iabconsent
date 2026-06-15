@@ -464,6 +464,11 @@ func (p *V2ParsedConsent) MinorVersion() (int, error) {
 	// Any TCF v2 string that has TCFPolicyVersion of 4 indicates v2.2.
 	case 4:
 		return 2, nil
+	// Any TCF v2 string that has TCFPolicyVersion of 5 indicates v2.3. TCF v2.3 did not
+	// change the Core String bit layout; it only made the Disclosed Vendors segment
+	// mandatory, so the existing v2 parser handles v2.3 strings unchanged.
+	case 5:
+		return 3, nil
 	default:
 		return 100, errors.Errorf("Unsupported TCFPolicyVersion %d", p.TCFPolicyVersion)
 	}

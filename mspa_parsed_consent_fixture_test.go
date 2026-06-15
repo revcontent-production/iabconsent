@@ -1017,6 +1017,63 @@ var mspaConsentFixtures = map[int]map[string]*iabconsent.MspaParsedConsent{
 			Gpc:                     true,
 		},
 	},
+	// Minnesota
+	iabconsent.UsMinnesotaSID: {
+		// usmn with representative mixed values and no GPC subsection.
+		"BZlhhpWA": {
+			Version:                         1,
+			SharingNotice:                   iabconsent.NoticeProvided,
+			SaleOptOutNotice:                iabconsent.NoticeNotProvided,
+			TargetedAdvertisingOptOutNotice: iabconsent.NoticeProvided,
+			SaleOptOut:                      iabconsent.NotOptedOut,
+			TargetedAdvertisingOptOut:       iabconsent.OptedOut,
+			SensitiveDataProcessingConsents: map[int]iabconsent.MspaConsent{
+				0: iabconsent.NoConsent,
+				1: iabconsent.Consent,
+				2: iabconsent.ConsentNotApplicable,
+				3: iabconsent.NoConsent,
+				4: iabconsent.Consent,
+				5: iabconsent.ConsentNotApplicable,
+				6: iabconsent.NoConsent,
+				7: iabconsent.Consent,
+			},
+			KnownChildSensitiveDataConsents: map[int]iabconsent.MspaConsent{
+				0: iabconsent.Consent,
+			},
+			PersonalDataConsents:    iabconsent.NoConsent,
+			MspaCoveredTransaction:  iabconsent.MspaYes,
+			MspaOptOutOptionMode:    iabconsent.MspaYes,
+			MspaServiceProviderMode: iabconsent.MspaNo,
+			Gpc:                     false,
+		},
+		// usmn with the same core values and a GPC True subsection.
+		"BZlhhpWA.YA": {
+			Version:                         1,
+			SharingNotice:                   iabconsent.NoticeProvided,
+			SaleOptOutNotice:                iabconsent.NoticeNotProvided,
+			TargetedAdvertisingOptOutNotice: iabconsent.NoticeProvided,
+			SaleOptOut:                      iabconsent.NotOptedOut,
+			TargetedAdvertisingOptOut:       iabconsent.OptedOut,
+			SensitiveDataProcessingConsents: map[int]iabconsent.MspaConsent{
+				0: iabconsent.NoConsent,
+				1: iabconsent.Consent,
+				2: iabconsent.ConsentNotApplicable,
+				3: iabconsent.NoConsent,
+				4: iabconsent.Consent,
+				5: iabconsent.ConsentNotApplicable,
+				6: iabconsent.NoConsent,
+				7: iabconsent.Consent,
+			},
+			KnownChildSensitiveDataConsents: map[int]iabconsent.MspaConsent{
+				0: iabconsent.Consent,
+			},
+			PersonalDataConsents:    iabconsent.NoConsent,
+			MspaCoveredTransaction:  iabconsent.MspaYes,
+			MspaOptOutOptionMode:    iabconsent.MspaYes,
+			MspaServiceProviderMode: iabconsent.MspaNo,
+			Gpc:                     true,
+		},
+	},
 }
 
 var tcfeuV2ConsentFixtures = map[int]map[string]*iabconsent.V2ParsedConsent{
