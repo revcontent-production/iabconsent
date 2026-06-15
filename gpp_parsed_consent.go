@@ -28,6 +28,7 @@ const (
 	UsNewHampshireSID
 	UsNewJerseySID
 	UsTennesseeSID
+	UsMinnesotaSID
 )
 
 // GppHeader is the first section of a GPP Consent String.
@@ -151,7 +152,7 @@ func MapGppSectionToParser(s string) ([]GppSectionParser, error) {
 			gppSection = NewUSPV(segments[i])
 		case UsNationalSID, UsCaliforniaSID, UsVirginiaSID, UsColoradoSID, UsUtahSID, UsConnecticutSID, UsFloridaSID,
 			UsMontanaSID, UsOregonSID, UsTexasSID, UsDelawareSID, UsIowaSID, UsNebraskaSID, UsNewHampshireSID,
-			UsNewJerseySID, UsTennesseeSID:
+			UsNewJerseySID, UsTennesseeSID, UsMinnesotaSID:
 			gppSection = NewMspa(sid, segments[i])
 		default:
 			gppSection = NewNotSupported(segments[i], sid)

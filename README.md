@@ -9,7 +9,7 @@
 
 A Golang implementation of the:
 - IAB Consent String 1.1 Spec
-- IAB Transparency and Consent String v2.0-v2.2
+- IAB Transparency and Consent String v2.0-v2.3
 - IAB Tech Lab Global Privacy Platform (GPP) Spec v1.0 Sections:
   - US National Multi-State Privacy Agreement
   - US California Multi-State Privacy Agreement
@@ -17,13 +17,24 @@ A Golang implementation of the:
   - US Colorado Multi-State Privacy Agreement
   - US Utah Multi-State Privacy Agreement
   - US Connecticut Multi-State Privacy Agreement
+  - US Florida Multi-State Privacy Agreement
+  - US Montana Multi-State Privacy Agreement
+  - US Oregon Multi-State Privacy Agreement
+  - US Texas Multi-State Privacy Agreement
+  - US Delaware Multi-State Privacy Agreement
+  - US Iowa Multi-State Privacy Agreement
+  - US Nebraska Multi-State Privacy Agreement
+  - US New Hampshire Multi-State Privacy Agreement
+  - US New Jersey Multi-State Privacy Agreement
+  - US Tennessee Multi-State Privacy Agreement
+  - US Minnesota Multi-State Privacy Agreement
 
 To install:
 ```
 go get -v github.com/revcontent-production/iabconsent
 ```
 
-# Transparency and Consent Framework v1.1 + v2.0-v2.2
+# Transparency and Consent Framework v1.1 + v2.0-v2.3
 
 This package defines two structs (`ParsedConsent` and `V2ParsedConsent`) which contain all of the fields of the IAB 
 TCF v1.1 Consent String and the IAB Transparency and Consent String v2.0 respectively.
