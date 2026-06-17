@@ -4,7 +4,14 @@ package iabconsent
 // Format can be found here: https://github.com/InteractiveAdvertisingBureau/Global-Privacy-Platform/blob/main/Sections/US-National/IAB%20Privacy%E2%80%99s%20National%20Privacy%20Technical%20Specification.md#core-segment
 type MspaParsedConsent struct {
 	// The version of this section specification used to encode the string.
+	// For the newer US-State sections (MD/IN/KY/RI) this is the leading
+	// MspaVersion Int(6) field of the core segment.
 	Version int
+	// MspaMode is the combined MSPA mode field (Int(2)) used by the newer
+	// US-State sections (MD/IN/KY/RI), replacing the separate
+	// MspaOptOutOptionMode / MspaServiceProviderMode fields.
+	// 0 = Not Applicable, 1 = Opt-Out Option Mode, 2 = Service Provider Mode.
+	MspaMode MspaMode
 	// Notice of the Sharing of the Consumer’s Personal Data with Third Parties.
 	// 0 Not Applicable. The Business does not share Personal Data with Third Parties.
 	// 1 Yes, notice was provided

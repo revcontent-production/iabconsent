@@ -28,6 +28,19 @@ const (
 	UsNewHampshireSID
 	UsNewJerseySID
 	UsTennesseeSID
+	UsMinnesotaSID
+)
+
+// US-State sections using the newer GPP Section-Header wire format (REV-32).
+// These IDs come from the IAB GPP "Section Information" registry. They are
+// declared with explicit values (rather than continuing the iota block above)
+// for clarity. They follow UsMinnesotaSID (ID 23, in the iota block above).
+// Verified against the IAB section specs: MD=24, IN=25, KY=26, RI=27.
+const (
+	UsMarylandSID    = 24
+	UsIndianaSID     = 25
+	UsKentuckySID    = 26
+	UsRhodeIslandSID = 27
 )
 
 // GppHeader is the first section of a GPP Consent String.
@@ -151,7 +164,9 @@ func MapGppSectionToParser(s string) ([]GppSectionParser, error) {
 			gppSection = NewUSPV(segments[i])
 		case UsNationalSID, UsCaliforniaSID, UsVirginiaSID, UsColoradoSID, UsUtahSID, UsConnecticutSID, UsFloridaSID,
 			UsMontanaSID, UsOregonSID, UsTexasSID, UsDelawareSID, UsIowaSID, UsNebraskaSID, UsNewHampshireSID,
-			UsNewJerseySID, UsTennesseeSID:
+			UsNewJerseySID, UsTennesseeSID, UsMinnesotaSID,
+			// US-State sections using the newer GPP Section-Header wire format (REV-32).
+			UsMarylandSID, UsIndianaSID, UsKentuckySID, UsRhodeIslandSID:
 			gppSection = NewMspa(sid, segments[i])
 		default:
 			gppSection = NewNotSupported(segments[i], sid)
