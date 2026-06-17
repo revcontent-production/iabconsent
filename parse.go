@@ -434,7 +434,7 @@ func ParseV2(s string) (*V2ParsedConsent, error) {
 	if mv, _ := p.MinorVersion(); mv >= 2 {
 		// Bitfield uses 1-indexing, so we need to check for purposes 3-6 (not bit positions 2-5).
 		for lit := 3; lit <= 6; lit++ {
-			if p.PurposesLITransparency[lit] != false {
+			if p.PurposesLITransparency[lit] {
 				return nil, errors.Errorf("TCF String Version 2.2 or higher has invalid PurposesLIT %d not set to 0.", lit)
 			}
 		}
