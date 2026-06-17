@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches: [ master ]
+
+# Avoid overlapping release runs racing on tags.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  # Gate the release on a green test run (confirm all tests pass post-merge).
+  test:
+    uses: ./.github/workflows/test.yml
+
+  release:
+    name: Tag & release
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Compute next version (+0.0.1 patch bump)
+        id: ver
+        run: |
+          set -euo pipefail
+          latest="$(git tag --list 'v*' --sort=-v:refname | head -n1)"
+          if [ -z "$latest" ]; then
+            latest="v0.0.0"
+          fi
+          echo "Latest tag: $latest"
+          ver="${latest#v}"
+          IFS='.' read -r major minor patch <<< "$ver"
+          major="${major:-0}"; minor="${minor:-0}"; patch="${patch:-0}"
+          next="v${major}.${minor}.$((patch + 1))"
+          echo "Next version: $next"
+          if git rev-parse "$next" >/dev/null 2>&1; then
+            echo "Tag $next already exists; skipping release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Create release (marked latest)
+        if: steps.ver.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release create "${{ steps.ver.outputs.next }}" \
+            --target "${{ github.sha }}" \
+            --title "${{ steps.ver.outputs.next }}" \
+            --generate-notes \
+            --latest
