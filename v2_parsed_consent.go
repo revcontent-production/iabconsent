@@ -356,10 +356,7 @@ func (p *V2ParsedConsent) EveryPurposeAllowed(ps []int) bool {
 // the V2ParsedConsent, otherwise false.
 // Deprecated and replaced by PurposeAllowedForConsent
 func (p *V2ParsedConsent) PurposeAllowed(ps int) bool {
-	if !p.PurposesConsent[ps] {
-		return false
-	}
-	return true
+	return p.PurposesConsent[ps]
 }
 
 // VendorAllowed returns true if the ParsedConsent contains affirmative consent
@@ -384,10 +381,7 @@ func (p *V2ParsedConsent) VendorAllowedForConsent(v int) bool {
 }
 
 func (p *V2ParsedConsent) PurposeAllowedForConsent(ps int) bool {
-	if !p.PurposesConsent[ps] {
-		return false
-	}
-	return true
+	return p.PurposesConsent[ps]
 }
 
 // VendorAllowedForConsent returns true if the ParsedConsent contains affirmative legitimate interest
@@ -401,10 +395,7 @@ func (p *V2ParsedConsent) VendorAllowedForLI(v int) bool {
 }
 
 func (p *V2ParsedConsent) PurposeAllowedForLI(ps int) bool {
-	if !p.PurposesLITransparency[ps] {
-		return false
-	}
-	return true
+	return p.PurposesLITransparency[ps]
 }
 
 // PublisherRestricted returns true if any purpose in |ps| is
@@ -476,8 +467,5 @@ func (p *V2ParsedConsent) MinorVersion() (int, error) {
 
 // IsVendorRestricted returns true if the vendor is restricted by PubRestrictionEntry
 func (p *PubRestrictionEntry) IsVendorRestricted(v int) bool {
-	if inRangeEntries(v, p.RestrictionsRange) {
-		return true
-	}
-	return false
+	return inRangeEntries(v, p.RestrictionsRange)
 }

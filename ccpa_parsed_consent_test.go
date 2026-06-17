@@ -33,12 +33,12 @@ func (s *CcpaSuite) TestParseCcpa(c *check.C) {
 	c.Assert(ccpaParsedConset.OptOutSale, check.Equals, uint8('N'))
 	c.Assert(ccpaParsedConset.LSPACoveredTransaction, check.Equals, uint8('N'))
 
-	ccpaParsedConset, err = ParseCCPA("1NNNN")
+	_, err = ParseCCPA("1NNNN")
 	c.Assert(err, check.Not(check.IsNil))
 
-	ccpaParsedConset, err = ParseCCPA("2NYN")
+	_, err = ParseCCPA("2NYN")
 	c.Assert(err, check.Not(check.IsNil))
 
-	ccpaParsedConset, err = ParseCCPA("1ABC")
+	_, err = ParseCCPA("1ABC")
 	c.Assert(err, check.Not(check.IsNil))
 }

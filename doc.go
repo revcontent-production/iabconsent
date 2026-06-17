@@ -1,5 +1,4 @@
 /*
-
 Package iabconsent provides structs and methods for parsing vendor consent strings as defined by the IAB.
 Current two versions of consent strings are supported.
 
@@ -12,6 +11,5 @@ https://github.com/InteractiveAdvertisingBureau/GDPR-Transparency-and-Consent-Fr
 Copyright (c) 2020 LiveRamp. All rights reserved.
 
 Written by Andy Day, Software Engineer @ LiveRamp for use in the LiveRamp Pixel Server.
-
 */
 package iabconsent

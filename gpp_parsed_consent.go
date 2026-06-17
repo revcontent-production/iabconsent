@@ -230,7 +230,7 @@ func ParseGppSubSections(subSections []string) (*GppSubSection, error) {
 			}
 			// Only override if not set to true already, as we want the most restrictive value
 			// if > 1 GPC subsection.
-			if gppSub.Gpc != true {
+			if !gppSub.Gpc {
 				gppSub.Gpc = gppValue
 			}
 		}
