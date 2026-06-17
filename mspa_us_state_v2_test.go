@@ -231,3 +231,212 @@ func (w *bitWriter) encode() string {
 	}
 	return base64.RawURLEncoding.EncodeToString(buf)
 }
+
+// encodeUsStateV2Core encodes the MD/IN/KY/RI core segment (segment 0) from a
+// parsed consent, writing each field in the exact order parseUsStateV2Core
+// reads it. hasKnownChild includes the IN/KY/RI KnownChildSensitiveDataConsents
+// Int(2); Maryland omits it. The encoder is the inverse of the parser and is
+// pinned to the canonical iabgpp-es reference vectors by
+// TestUsStateV2EncoderMatchesCanonicalVectors below, so the mixed-value vectors
+// it mints for the fixture table are guaranteed to be canonical encodings.
+func encodeUsStateV2Core(p *iabconsent.MspaParsedConsent, hasKnownChild bool) string {
+	var w bitWriter
+	w.writeInt(p.Version, 6) // MspaVersion
+	w.writeInt(int(p.MspaCoveredTransaction), 2)
+	w.writeInt(int(p.MspaMode), 2)
+	w.writeInt(int(p.SharingNotice), 2) // ProcessingNotice == SharingNotice
+	w.writeInt(int(p.SaleOptOutNotice), 2)
+	w.writeInt(int(p.TargetedAdvertisingOptOutNotice), 2)
+	w.writeInt(int(p.SaleOptOut), 2)
+	w.writeInt(int(p.TargetedAdvertisingOptOut), 2)
+	if hasKnownChild {
+		w.writeInt(int(p.KnownChildSensitiveDataConsents[0]), 2)
+	}
+	w.writeInt(int(p.PersonalDataConsents), 2) // AdditionalDataProcessingConsent
+	return w.encode()
+}
+
+// encodeUsStateV2Sensitive encodes the IN/KY/RI "Sensitive Data Consents"
+// subsection (segment 1): a bare SensitiveDataProcessing N-Bitfield(2,8) with no
+// SubsectionType prefix, mirroring parseUsStateV2SensitiveData.
+func encodeUsStateV2Sensitive(sensitive map[int]iabconsent.MspaConsent) string {
+	var w bitWriter
+	for i := 0; i < 8; i++ {
+		w.writeInt(int(sensitive[i]), 2)
+	}
+	return w.encode()
+}
+
+// TestUsStateV2EncoderMatchesCanonicalVectors pins encodeUsStateV2Core /
+// encodeUsStateV2Sensitive to the canonical iabgpp-es PR #106 reference vectors.
+// If these pass, the encoder reproduces the IAB reference encoder bit-for-bit,
+// so any additional vector it mints (used by TestParseUsStateV2Fixtures) is a
+// real canonical encoding rather than a self-consistent invention.
+func (s *MspaUsStateV2Suite) TestUsStateV2EncoderMatchesCanonicalVectors(c *check.C) {
+	// Maryland core (no KnownChild): default "BQAA", all-fields-set "BVVU".
+	c.Check(encodeUsStateV2Core(&iabconsent.MspaParsedConsent{
+		Version:                1,
+		MspaCoveredTransaction: iabconsent.MspaYes,
+	}, false), check.Equals, "BQAA")
+	c.Check(encodeUsStateV2Core(&iabconsent.MspaParsedConsent{
+		Version:                         1,
+		MspaCoveredTransaction:          iabconsent.MspaYes,
+		MspaMode:                        iabconsent.MspaModeOptOutOption,
+		SharingNotice:                   iabconsent.NoticeProvided,
+		SaleOptOutNotice:                iabconsent.NoticeProvided,
+		TargetedAdvertisingOptOutNotice: iabconsent.NoticeProvided,
+		SaleOptOut:                      iabconsent.OptedOut,
+		TargetedAdvertisingOptOut:       iabconsent.OptedOut,
+		PersonalDataConsents:            iabconsent.NoConsent,
+	}, false), check.Equals, "BVVU")
+
+	// IN/KY/RI core (with KnownChild): default "BQAA", all-fields-set "BVVV".
+	c.Check(encodeUsStateV2Core(&iabconsent.MspaParsedConsent{
+		Version:                         1,
+		MspaCoveredTransaction:          iabconsent.MspaYes,
+		KnownChildSensitiveDataConsents: map[int]iabconsent.MspaConsent{0: iabconsent.ConsentNotApplicable},
+	}, true), check.Equals, "BQAA")
+	c.Check(encodeUsStateV2Core(&iabconsent.MspaParsedConsent{
+		Version:                         1,
+		MspaCoveredTransaction:          iabconsent.MspaYes,
+		MspaMode:                        iabconsent.MspaModeOptOutOption,
+		SharingNotice:                   iabconsent.NoticeProvided,
+		SaleOptOutNotice:                iabconsent.NoticeProvided,
+		TargetedAdvertisingOptOutNotice: iabconsent.NoticeProvided,
+		SaleOptOut:                      iabconsent.OptedOut,
+		TargetedAdvertisingOptOut:       iabconsent.OptedOut,
+		KnownChildSensitiveDataConsents: map[int]iabconsent.MspaConsent{0: iabconsent.NoConsent},
+		PersonalDataConsents:            iabconsent.NoConsent,
+	}, true), check.Equals, "BVVV")
+
+	// Sensitive Data Consents subsection: all Not-Applicable "AAA", canonical
+	// mixed set "kkk" (= [2,1,0,2,1,0,2,1]).
+	c.Check(encodeUsStateV2Sensitive(map[int]iabconsent.MspaConsent{
+		0: iabconsent.ConsentNotApplicable, 1: iabconsent.ConsentNotApplicable,
+		2: iabconsent.ConsentNotApplicable, 3: iabconsent.ConsentNotApplicable,
+		4: iabconsent.ConsentNotApplicable, 5: iabconsent.ConsentNotApplicable,
+		6: iabconsent.ConsentNotApplicable, 7: iabconsent.ConsentNotApplicable,
+	}), check.Equals, "AAA")
+	c.Check(encodeUsStateV2Sensitive(map[int]iabconsent.MspaConsent{
+		0: iabconsent.Consent, 1: iabconsent.NoConsent, 2: iabconsent.ConsentNotApplicable,
+		3: iabconsent.Consent, 4: iabconsent.NoConsent, 5: iabconsent.ConsentNotApplicable,
+		6: iabconsent.Consent, 7: iabconsent.NoConsent,
+	}), check.Equals, "kkk")
+}
+
+// TestParseUsStateV2Fixtures is the fixture-style table (modelled on
+// mspa_parsed_consent_fixture_test.go + TestParseMSPA) for the newer combined-
+// MspaMode states. Each case carries an expected *MspaParsedConsent plus the
+// optional GPC / Sensitive-Data subsection; the canonical encoded section string
+// is minted by the pinned encoder above, then routed back through
+// NewMspa(sid, section).ParseConsent() and asserted with DeepEquals. This gives
+// the new states the same representative mixed-value coverage (notices, opt-
+// outs, MspaMode, known-child, per-category sensitive data, GPC true/false) the
+// older flat states already have.
+func (s *MspaUsStateV2Suite) TestParseUsStateV2Fixtures(c *check.C) {
+	// mixedSensitive is a representative per-category Sensitive Data set used by
+	// the IN/KY/RI cases.
+	var mixedSensitive = map[int]iabconsent.MspaConsent{
+		0: iabconsent.Consent, 1: iabconsent.NoConsent, 2: iabconsent.ConsentNotApplicable,
+		3: iabconsent.Consent, 4: iabconsent.NoConsent, 5: iabconsent.ConsentNotApplicable,
+		6: iabconsent.Consent, 7: iabconsent.NoConsent,
+	}
+
+	var tcs []struct {
+		desc     string
+		sid      int
+		section  string
+		expected *iabconsent.MspaParsedConsent
+	}
+
+	// --- Maryland (no KnownChild, no Sensitive subsection; optional GPC). ---
+	var mdMixedCore = &iabconsent.MspaParsedConsent{
+		Version:                         1,
+		MspaCoveredTransaction:          iabconsent.MspaYes,
+		MspaMode:                        iabconsent.MspaModeServiceProvider,
+		SharingNotice:                   iabconsent.NoticeProvided,
+		SaleOptOutNotice:                iabconsent.NoticeNotProvided,
+		TargetedAdvertisingOptOutNotice: iabconsent.NoticeNotApplicable,
+		SaleOptOut:                      iabconsent.OptedOut,
+		TargetedAdvertisingOptOut:       iabconsent.NotOptedOut,
+		PersonalDataConsents:            iabconsent.Consent,
+	}
+	var mdCore = encodeUsStateV2Core(mdMixedCore, false)
+	tcs = append(tcs,
+		struct {
+			desc     string
+			sid      int
+			section  string
+			expected *iabconsent.MspaParsedConsent
+		}{"Maryland mixed, no subsection (gpc=false)", iabconsent.UsMarylandSID, mdCore, mdMixedCore},
+	)
+	// Same core with a GPC=true subsection (canonical ".YA").
+	var mdMixedGpc = clonePc(mdMixedCore)
+	mdMixedGpc.Gpc = true
+	tcs = append(tcs,
+		struct {
+			desc     string
+			sid      int
+			section  string
+			expected *iabconsent.MspaParsedConsent
+		}{"Maryland mixed, gpc=true", iabconsent.UsMarylandSID, mdCore + ".YA", mdMixedGpc},
+	)
+
+	// --- IN / KY / RI (KnownChild Int(2) + optional Sensitive subsection). ---
+	for _, st := range []struct {
+		desc string
+		sid  int
+	}{
+		{"Indiana", iabconsent.UsIndianaSID},
+		{"Kentucky", iabconsent.UsKentuckySID},
+		{"Rhode Island", iabconsent.UsRhodeIslandSID},
+	} {
+		// Core-only (no Sensitive subsection): SensitiveDataProcessingConsents stays nil.
+		var coreOnly = &iabconsent.MspaParsedConsent{
+			Version:                         1,
+			MspaCoveredTransaction:          iabconsent.MspaYes,
+			MspaMode:                        iabconsent.MspaModeServiceProvider,
+			SharingNotice:                   iabconsent.NoticeProvided,
+			SaleOptOutNotice:                iabconsent.NoticeNotProvided,
+			TargetedAdvertisingOptOutNotice: iabconsent.NoticeProvided,
+			SaleOptOut:                      iabconsent.OptedOut,
+			TargetedAdvertisingOptOut:       iabconsent.NotOptedOut,
+			KnownChildSensitiveDataConsents: map[int]iabconsent.MspaConsent{0: iabconsent.NoConsent},
+			PersonalDataConsents:            iabconsent.Consent,
+		}
+		var core = encodeUsStateV2Core(coreOnly, true)
+		tcs = append(tcs,
+			struct {
+				desc     string
+				sid      int
+				section  string
+				expected *iabconsent.MspaParsedConsent
+			}{st.desc + " mixed, core only", st.sid, core, coreOnly},
+		)
+		// Same core + a mixed Sensitive Data subsection.
+		var withSensitive = clonePc(coreOnly)
+		withSensitive.SensitiveDataProcessingConsents = mixedSensitive
+		tcs = append(tcs,
+			struct {
+				desc     string
+				sid      int
+				section  string
+				expected *iabconsent.MspaParsedConsent
+			}{st.desc + " mixed, with sensitive subsection", st.sid, core + "." + encodeUsStateV2Sensitive(mixedSensitive), withSensitive},
+		)
+	}
+
+	for _, t := range tcs {
+		c.Log(t.desc + " - " + t.section)
+		var p, err = iabconsent.NewMspa(t.sid, t.section).ParseConsent()
+		c.Assert(err, check.IsNil)
+		c.Check(p, check.DeepEquals, t.expected)
+	}
+}
+
+// clonePc returns a shallow copy of a MspaParsedConsent for building related
+// fixture expectations (the maps are treated as read-only in these tests).
+func clonePc(p *iabconsent.MspaParsedConsent) *iabconsent.MspaParsedConsent {
+	var cp = *p
+	return &cp
+}
